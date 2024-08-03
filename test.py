@@ -11,7 +11,7 @@ while True:
     
     # displays each frame
     cv.imshow('frame', frame)
-    if cv.waitKey(1) == ord('q'):
+    if cv.waitKey(0) == ord('q'):
         break
 
 play.release()
