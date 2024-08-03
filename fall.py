@@ -64,16 +64,10 @@ def get_pose_keypoints(frame, pose):
     return keypoints
 
 
-# detect fall based on keypoint angles
+# detect based on keypoint angles
 class FallAction:
     def __init__(self):
-        self.detected_angles = collections.deque(5*[0], 5)
-
-
-    # def check(self, angle):
-    #     self.detected_angles.appendleft(angle)
-    #     if all(70 <= i <= 100 for i in self.detected_angles):
-    #         print("Fall Detected :)")
+        self.detected_angles = collections.deque(5*[0], 5)t
 
 
 # Initialize MediaPipe Pose
@@ -90,7 +84,7 @@ frame_height = int(play.get(cv.CAP_PROP_FRAME_HEIGHT))
 thre = (frame_height // 2) * 100
 
 
-# Initialize fall detection
+# Initialize detection
 fall_action = FallAction()
 
 text_sent = False
@@ -129,7 +123,7 @@ while True:
             cx, cy = p1[0], p1[1]  # Assuming cx and cy are the coordinates for the icon
             draw.rounded_rectangle((cx - 10, cy - 10, cx + 60, cy + 60), fill=(84, 61, 247), radius=15)
             frame = np.array(im)
-            print("Fall Detected :)")
+            print("Detected :)")
             winsound.Beep(freq, duration)
             if text_sent == False:
                 message = client.messages.create(body="FALL DETECTED for patient",
