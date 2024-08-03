@@ -13,9 +13,6 @@ client = Client(account_sid, auth_token)
 duration = 1000  # milliseconds
 freq = 440  # Hz
 
-
-
-
 #skeleton keypoints
 def plot_skeleton_kpts(img, kpts, thickness):
     for i in range(len(kpts) - 1):
@@ -64,12 +61,6 @@ def get_pose_keypoints(frame, pose):
     return keypoints
 
 
-# detect based on keypoint angles
-class FallAction:
-    def __init__(self):
-        self.detected_angles = collections.deque(5*[0], 5)t
-
-
 # Initialize MediaPipe Pose
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()
@@ -83,9 +74,6 @@ play = cv.VideoCapture(0)
 frame_height = int(play.get(cv.CAP_PROP_FRAME_HEIGHT))
 thre = (frame_height // 2) * 100
 
-
-# Initialize detection
-fall_action = FallAction()
 
 text_sent = False
 
@@ -133,16 +121,6 @@ while True:
 
                 print(message.sid)
                 text_sent = True
-
-
-        # Calculate angle for fall detection
-        # if len(keypoints) > 10:
-        #     shoulder = keypoints[mp_pose.PoseLandmark.LEFT_SHOULDER.value]
-        #     hip = keypoints[mp_pose.PoseLandmark.LEFT_HIP.value]
-        #     dx = shoulder[0] - hip[0]
-        #     dy = shoulder[1] - hip[1]
-        #     angle = np.degrees(np.arctan2(dy, dx))
-        #     fall_action.check(angle)
 
 
     # Display each frame
