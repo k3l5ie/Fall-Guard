@@ -4,13 +4,17 @@ import cv2 as cv
 play = cv.VideoCapture(1)
 
 while True:
-    ret, frame = play.read()
+    gotframes, frame = play.read()
 
-    if not ret:
+    if not gotframes:
         break
     
     # displays each frame
+<<<<<<< HEAD:test.py
     cv.imshow('frame', frame)
+=======
+    cv.imshow('Camera 1', frame)
+>>>>>>> 97d6e506c11ab5ede73a3cf94cd6958e0043caaa:camerafeed.py
     if cv.waitKey(0) == ord('q'):
         break
 
