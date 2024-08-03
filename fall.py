@@ -3,6 +3,12 @@ import numpy as np
 from PIL import Image, ImageDraw
 import mediapipe as mp
 import collections
+import winsound
+
+duration = 1000  # milliseconds
+freq = 440  # Hz
+
+
 
 
 #skeleton keypoints
@@ -59,10 +65,10 @@ class FallAction:
         self.detected_angles = collections.deque(5*[0], 5)
 
 
-    def check(self, angle):
-        self.detected_angles.appendleft(angle)
-        if all(70 <= i <= 100 for i in self.detected_angles):
-            print("Fall Detected :)")
+    # def check(self, angle):
+    #     self.detected_angles.appendleft(angle)
+    #     if all(70 <= i <= 100 for i in self.detected_angles):
+    #         print("Fall Detected :)")
 
 
 # Initialize MediaPipe Pose
@@ -118,16 +124,17 @@ while True:
             draw.rounded_rectangle((cx - 10, cy - 10, cx + 60, cy + 60), fill=(84, 61, 247), radius=15)
             frame = np.array(im)
             print("Fall Detected :)")
+            winsound.Beep(freq, duration)
 
 
         # Calculate angle for fall detection
-        if len(keypoints) > 10:
-            shoulder = keypoints[mp_pose.PoseLandmark.LEFT_SHOULDER.value]
-            hip = keypoints[mp_pose.PoseLandmark.LEFT_HIP.value]
-            dx = shoulder[0] - hip[0]
-            dy = shoulder[1] - hip[1]
-            angle = np.degrees(np.arctan2(dy, dx))
-            fall_action.check(angle)
+        # if len(keypoints) > 10:
+        #     shoulder = keypoints[mp_pose.PoseLandmark.LEFT_SHOULDER.value]
+        #     hip = keypoints[mp_pose.PoseLandmark.LEFT_HIP.value]
+        #     dx = shoulder[0] - hip[0]
+        #     dy = shoulder[1] - hip[1]
+        #     angle = np.degrees(np.arctan2(dy, dx))
+        #     fall_action.check(angle)
 
 
     # Display each frame
