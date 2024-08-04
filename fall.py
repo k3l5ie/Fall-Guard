@@ -8,12 +8,6 @@ from twilio.rest import Client
 
 import tkinter as tk
 
-# from flask import Flask, request
-# from flask_cors import CORS
-# app = Flask(__name__)
-
-# cors = CORS(app)
-
 account_sid = 'ACcde19b90629037ec61101f50ab16ed75'
 auth_token = '5b48f2e770e217517669a8f4ddce1a38'
 client = Client(account_sid, auth_token)
@@ -71,6 +65,17 @@ def get_pose_keypoints(frame, pose):
             keypoints.append((int(lm.x * frame.shape[1]), int(lm.y * frame.shape[0])))
     return keypoints
 
+def resize_frame(frame, scale=0.75):
+    """Resize the frame to a given scale."""
+    # Compute new dimensions
+    width = int(frame.shape[1] * scale)
+    height = int(frame.shape[0] * scale)
+    dimensions = (width, height)
+
+    # Resize the frame
+    resized_frame = cv.resize(frame, dimensions, interpolation=cv.INTER_CUBIC)
+    return resized_frame
+
 
 # Initialize MediaPipe Pose
 mp_pose = mp.solutions.pose
@@ -78,7 +83,7 @@ pose = mp_pose.Pose()
 
 
 # Initialize webcam
-play = cv.VideoCapture(0)
+play = cv.VideoCapture(1)
 
 
 # Threshold value
@@ -87,37 +92,6 @@ thre = (frame_height // 2) * 100
 
 text_sent = False
 
-# def retrieve_input():
-#     input_value = input_field.get()  # Get the text from input_field
-#     print(input_value)  # Print the input to the console
-#     root.destroy()  # Close the GUI window
-#     return input_value  # Return the input value
-
-# # Create the main window
-# root = tk.Tk()
-# root.title("Fall Guard Emergency Setup")
-
-# # Create a label widget
-# label = tk.Label(root, text="Enter User's Name")
-# label.pack(padx=20, pady=20)
-
-# # Create a text entry widget
-# input_field = tk.Entry(root, width=50)
-# input_field.pack(padx=20, pady=20)
-
-# # Create a button that retrieves the input
-# submit_button = tk.Button(root, text="Submit", command=retrieve_input)
-# submit_button.pack(padx=20, pady=20)
-    
-# # Start the GUI event loop
-# root.mainloop()
-
-# @app.route("/", methods=['POST'])
-# def fall_detected():
-    # data = request.get_json()
-    # retrieved = True
-
-    # text = f'Fall detected for {retrieve_input()}'
 
 while True:
         
@@ -157,7 +131,7 @@ while True:
             print("Detected :)")
             winsound.Beep(freq, duration)
             if text_sent == False:
-                message = client.messages.create(body="fall detected",
+                message = client.messages.create(body="Fall Detected for Patient!",
                     from_='+17209031383',
                     to='+16473337612'
                     )
@@ -165,8 +139,9 @@ while True:
                 print(message.sid)
                 text_sent = True
 
+    resized_frame = resize_frame(frame, scale=2.0)
     # Display each frame
-    cv.imshow('frame', frame)
+    cv.imshow('frame', resized_frame)
     if cv.waitKey(1) == ord('q'):
         break
 
