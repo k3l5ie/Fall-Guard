@@ -83,7 +83,7 @@ pose = mp_pose.Pose()
 
 
 # Initialize webcam
-play = cv.VideoCapture(1)
+play = cv.VideoCapture(0)
 
 
 # Threshold value
